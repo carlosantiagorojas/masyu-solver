@@ -3,7 +3,7 @@ from game import Game
 
 def main():
     file_name = check_args(sys.argv)
-    Game().start_game(file_name)
+    Game().game_flow(file_name)
     
                            
 def check_args(args):

@@ -1,5 +1,5 @@
 class AI:
-    def make_move(self):
+    def solve(self):
         print("Computer's move")
         # AI's logic goes here
         return

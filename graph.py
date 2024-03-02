@@ -26,7 +26,7 @@ class Graph:
         Check if the game is over, this is when the graph is cyclic
         """
         # Implement logic
-        return True
+        return False
     
     def __str__(self) -> str:
         matrix_str = "-" * 37 + "\n"
@@ -43,5 +43,5 @@ class Graph:
                         matrix_str += " \u25CB ".center(5) + "|"
                 else:
                     matrix_str += "".center(5) + "|"
-            matrix_str += "\n" + "-" * 37+ "\n"
+            matrix_str += "\n" + "-" * 37 + "\n"
         return matrix_str
