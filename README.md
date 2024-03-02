@@ -1,4 +1,4 @@
-# masyu
+# Masyu
 
 Masyu interface in python
 
