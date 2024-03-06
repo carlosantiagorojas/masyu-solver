@@ -2,6 +2,7 @@ from player import Player
 from ai import AI
 from graph import Graph
 
+
 class Game:
     def __init__(self):
         self.current_player = None

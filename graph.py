@@ -21,6 +21,13 @@ class Graph:
         
         return adjacency_matrix
     
+    def add_edge(self, s_row: int, s_column: int, e_row: int, e_column: int) -> None:
+        """
+        Add an edge between two nodes
+        """
+        # Implement logic
+        pass
+    
     def win(self) -> bool:
         """
         Check if the game is over, this is when the graph is cyclic

@@ -1,6 +1,7 @@
 import sys
 from game import Game
 
+
 def main():
     file_name = check_args(sys.argv)
     Game().game_flow(file_name)
