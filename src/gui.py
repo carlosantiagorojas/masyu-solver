@@ -36,7 +36,13 @@ class GUI:
                 self.canvas.delete(self.lines[points])
                 del self.lines[points]
                 print(f"Removed line between {points[0]} and {points[1]}")
-            elif (abs(self.clicked_buttons[0][0] - self.clicked_buttons[1][0]) == 1 and self.clicked_buttons[0][1] == self.clicked_buttons[1][1]) or (abs(self.clicked_buttons[0][1] - self.clicked_buttons[1][1]) == 1 and self.clicked_buttons[0][0] == self.clicked_buttons[1][0]):
+            elif (
+                (abs(self.clicked_buttons[0][0] - self.clicked_buttons[1][0]) == 1 and 
+                self.clicked_buttons[0][1] == self.clicked_buttons[1][1]) 
+                or 
+                (abs(self.clicked_buttons[0][1] - self.clicked_buttons[1][1]) == 1 and 
+                self.clicked_buttons[0][0] == self.clicked_buttons[1][0])
+            ):
                 # If the cells are adjacent, draw a line between them
                 self.draw_line(*points)
                 print(f"Drawn line between {points[0]} and {points[1]}")
@@ -45,5 +51,11 @@ class GUI:
 
     def draw_line(self, point1, point2):
         # Draw a line between two cells
-        line_id = self.canvas.create_line(point1[1]*83+41.5, point1[0]*83+41.5, point2[1]*83+41.5, point2[0]*83+41.5, width=2)
+        line_id = self.canvas.create_line(
+            point1[1]*83+41.5, 
+            point1[0]*83+41.5, 
+            point2[1]*83+41.5, 
+            point2[0]*83+41.5, 
+            width=2
+        )
         self.lines[(point1, point2)] = line_id  # Store the line
