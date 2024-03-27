@@ -1,5 +1,5 @@
 import sys
-from game import Game
+from src.game import Game
 
 
 def main():
