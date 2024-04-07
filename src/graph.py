@@ -36,36 +36,26 @@ class Graph:
         """
         Add an edge between two nodes
         """
-        # print(f"Adding edge between ({s_x}, {s_y}) and ({e_x}, {e_y})")
         self.adjacency_matrix[s_x][s_y].weight += 1
-        self.adjacency_matrix[e_x][e_y].weight += 1
-        # print(f"Weight of ({s_x}, {s_y}): {self.adjacency_matrix[s_x][s_y].weight}")
-        # print(f"Weight of ({e_x}, {e_y}): {self.adjacency_matrix[e_x][e_y].weight}")
-        # Implement logic
-        pass    
+        self.adjacency_matrix[e_x][e_y].weight += 1  
+    
     
     def remove_edge(self, s_x: int, s_y: int, e_x: int, e_y: int) -> None:
         """
         Add an edge between two nodes
         """
-        print("enter here")
-        # print(f"Adding edge between ({s_x}, {s_y}) and ({e_x}, {e_y})")
         self.adjacency_matrix[s_x][s_y].weight -= 1
         self.adjacency_matrix[e_x][e_y].weight -= 1
-        # print(f"Weight of ({s_x}, {s_y}): {self.adjacency_matrix[s_x][s_y].weight}")
-        # print(f"Weight of ({e_x}, {e_y}): {self.adjacency_matrix[e_x][e_y].weight}")
-        # Implement logic
-        pass  
+
     
     def check_win(self) -> bool:
         """
         Check if the game is over, this is when the graph is cyclic
         """
         # Implement logic
-        # print(self.all_nodes[0].weight)
-        if self.check_valid_black(0,0):
-            return True
-        return False
+        print(self.all_nodes[7].weight)
+        print(self.check_valid_white(2,3))
+        return self.check_valid_white(2,3)
     
     def dfs(self, x, y) -> bool:
         """
@@ -89,6 +79,7 @@ class Graph:
         """check if the black node is valid or not
         """
         valid = False
+        print("fasfda",self.adjacency_matrix[x][y].weight)
         if self.adjacency_matrix[x][y].valid_connections():
             if self.check_adyacent_white(x, y):
                 valid = True
@@ -105,23 +96,22 @@ class Graph:
         """
         pos_adyacent = []
         
-        node = self.adjacency_matrix[x - 2][y]
         # check left
-        if ((x - 2) >= 0):
+        if ((y - 2) >= 0):
             print("entre left")
             if (self.adjacency_matrix[x - 1][y].valid_connections()
                 and self.adjacency_matrix[x - 2][y].valid_connections()):
                 pos_adyacent.append(1)
 
         # check up
-        if ((y - 2) >= 0):
+        if ((x - 2) >= 0):
             print("entre up")
             if (self.adjacency_matrix[x][y - 1].valid_connections()
                 and self.adjacency_matrix[x][y - 2].valid_connections()):
                 pos_adyacent.append(2)
 
         # check down
-        if ((self.size - y) >= 2):
+        if ((self.size - x + 1) >= 2):
             print("entre down")
             if (self.adjacency_matrix[x][y + 1].valid_connections()
                 and self.adjacency_matrix[x][y + 2].valid_connections()
@@ -129,7 +119,7 @@ class Graph:
                 pos_adyacent.append(3)
 
         # check right
-        if ((self.size - x) >= 2):
+        if ((self.size - y + 1) >= 2):
             print("entre right")
             if (self.adjacency_matrix[x + 1][y].valid_connections()
                 and self.adjacency_matrix[x + 2][y].valid_connections() 
@@ -141,77 +131,110 @@ class Graph:
         return False
     
     def check_adyacent_white(self, x, y):
+        print("entre metodo")
         row_direction = False
         column_direction = False
-        turn_col_left = False
-        turn_col_right = False
-        turn_row_left = False
-        turn_row_right = False
-        valid = False
-        
+        # turn_col_left = False
+        # turn_col_right = False
+        # turn_row_left = False
+        # turn_row_right = False
+        # valid = False
+        first_row = False
+        last_row = False
+        first_col = False
+        last_col = False
         # check an adyacent connection
+        print("pato")
+        # if is on the first row
         # check left and right
-        if (self.adjacency_matrix[x - 1][y].valid_connections()
-            and self.adjacency_matrix[x + 1][y].valid_connections()):
-                row_direction = True
+        if ((x - 1) < 0):
+            print("auida1")
+            if (self.adjacency_matrix[x][y - 1].valid_connections()
+                and self.adjacency_matrix[x][y + 1].valid_connections()):
+                first_row = True
+                
+        # if is on the last row
+        # check left and right
+        elif ((self.size - x + 1) == 0):
+            print("auida2")
+            if (self.adjacency_matrix[x][y - 1].valid_connections()
+                and self.adjacency_matrix[x][y + 1].valid_connections()):
+                last_row = True
+        
+        # if is on the first column
         # check up and down
-        if (self.adjacency_matrix[x][y - 1].valid_connections()
-            and self.adjacency_matrix[x][y + 1].valid_connections()):
+        elif ((y - 1) < 0):
+            print("auida3")
+            if (self.adjacency_matrix[x - 1][y].valid_connections()
+                and self.adjacency_matrix[x - 1][y].valid_connections()):
+                first_col = True
+        
+        # if is on the last column
+        # check up and down
+        elif ((self.size - y + 1) == 0): 
+            print("auida4")
+            if (self.adjacency_matrix[x - 1][y].valid_connections()
+                and self.adjacency_matrix[x - 1][y].valid_connections()):
+                last_col = True
+        
+        else:
+            print("auida")
+            if (self.adjacency_matrix[x - 1][y].valid_connections()
+                and self.adjacency_matrix[x + 1][y].valid_connections()):
+                print("entre aquib")
                 column_direction = True
+            if (self.adjacency_matrix[x][y - 1].valid_connections()
+                and self.adjacency_matrix[x][y + 1].valid_connections()):
+                print("entre aquia")
+                row_direction = True
+        
+        # check turns
+        
+        # if is on the first row
+        if first_row:
+            if (self.adjacency_matrix[x + 1][y - 1].valid_connections()
+                or self.adjacency_matrix[x + 1][y + 1].valid_connections()):
+                return True
+        # if is on the last row
+        if last_row:
+            if (self.adjacency_matrix[x - 1][y - 1].valid_connections()
+                and self.adjacency_matrix[x - 1][y + 1].valid_connections()):
+                return True
+        # if is on the first column
+        if first_col:
+            if (self.adjacency_matrix[x - 1][y + 1].valid_connections()
+                or self.adjacency_matrix[x + 1][y + 1].valid_connections()):
+                return True
+        # if is on the last column
+        if last_col: 
+            if (self.adjacency_matrix[x - 1][y - 1].valid_connections()
+                and self.adjacency_matrix[x + 1][y - 1].valid_connections()):
+                return True
         
         # check turn   
         if row_direction or column_direction:
+            print("entre aqui2")
             # check connection turn to a column or row
             # check left
             if (self.adjacency_matrix[x - 1][y - 1].valid_connections()
-               or self.adjacency_matrix[x - 1][y + 1].valid_connections()):
-                turn_col_left = True
-                turn_row_left = True
-            # check right
-            elif (self.adjacency_matrix[x + 1][y - 1].valid_connections()
-               or self.adjacency_matrix[x + 1][y + 1].valid_connections()):
-                turn_col_right = True
-                turn_row_right = True
+                   or self.adjacency_matrix[x + 1][y - 1].valid_connections()
+                   or self.adjacency_matrix[x - 1][y + 1].valid_connections()
+                   or self.adjacency_matrix[x + 1][y + 1].valid_connections()):
+                print("entre aqui3")
+                return True
 
-        # check if there is two continuous connections
-        if turn_col_left:
-            if not self.adjacency_matrix[x - 2][y].valid_connections():
-                valid = True
-        if turn_col_right:
-            if not self.adjacency_matrix[x + 2][y].valid_connections():
-                valid = True
-        if turn_row_left:
-            if not self.adjacency_matrix[x][y - 2].valid_connections():
-                valid = True
-        if turn_row_right:
-            if not self.adjacency_matrix[x][y + 2].valid_connections():
-                valid = True
+        # # check if there is two continuous connections
+        # if turn_col_left:
+        #     if not self.adjacency_matrix[x - 2][y].valid_connections():
+        #         valid = True
+        # if turn_col_right:
+        #     if not self.adjacency_matrix[x + 2][y].valid_connections():
+        #         valid = True
+        # if turn_row_left:
+        #     if not self.adjacency_matrix[x][y - 2].valid_connections():
+        #         valid = True
+        # if turn_row_right:
+        #     if not self.adjacency_matrix[x][y + 2].valid_connections():
+        #         valid = True
         
-        return valid
-        
-    # def __str__(self) -> str:
-    #     matrix_str = "-" * 37 + "\n"
-    #     for i in range(self.size):
-    #         matrix_str += "|"
-    #         for j in range(self.size):
-    #             node = self.adjacency_matrix[i][j]
-    #             if node is not None:
-    #                 cell_str = ""
-    #                 if node.color == 1:
-    #                     # Use a Unicode character to represent a black circle
-    #                     cell_str = " \u25CF "
-    #                 elif node.color == 2:
-    #                     # Use a Unicode character to represent a white circle
-    #                     cell_str = " \u25CB "
-    #                 # Check if the node weight is greater than 0
-    #                 if node.weight > 0:
-    #                     # Use a Unicode character to represent a line
-    #                     if node.up or node.down:
-    #                         cell_str = " \u2502 "  # Vertical line
-    #                     if node.left or node.right:
-    #                         cell_str = " \u2500 "  # Horizontal line
-    #                 matrix_str += cell_str.center(5) + "|"
-    #             else:
-    #                 matrix_str += "".center(5) + "|"
-    #         matrix_str += "\n" + "-" * 37 + "\n"
-    # return matrix_str
+        return False
