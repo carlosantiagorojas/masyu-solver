@@ -28,12 +28,15 @@ class Node:
     -------
 
     """
-
-    def __init__(self, color: Optional[int]) -> None:
+    def __init__(self, color: Optional[int], x: int, y: int) -> None:
         """
         Args:
             color (Optional[int]): The color of the node
+            1: White
+            2: Black
         """
+        self.x = x
+        self.y = y
         self.color = color
         self.weight = 0
         self.left = False
@@ -41,5 +44,16 @@ class Node:
         self.up = False
         self.down = False
 
-    def __str__(self) -> str:
-        return str(self.color)
+    def valid_connections(self) -> bool:
+        """Check if the node has more than two connections
+
+        Returns:
+            bool: _description_
+        """
+        if 0 < self.weight < 3:
+            return True
+        return False
+        
+    
+    # def __str__(self) -> str:
+    #     return str(self.color)
