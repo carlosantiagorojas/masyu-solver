@@ -1,9 +1,8 @@
-from src.node import Node
+from node import Node
 
 
 class Graph:
     def __init__(self, file_name) -> None:
-        self.all_nodes = []
         self.adjacency_matrix = self.create_adjacency_matrix(file_name)
         self.size = len(self.adjacency_matrix)
         self.connected_nodes = []
@@ -23,8 +22,6 @@ class Graph:
                 adjacency_matrix[row - 1][col -
                                           1] = Node(color, row - 1, col - 1)
                 # print(adjacency_matrix[row - 1][col - 1])
-                self.all_nodes.append(adjacency_matrix[row - 1][col - 1])
-                # print(self.all_nodes)
 
         # Fill the matrix with the spaces
         for i in range(dimensions):
@@ -33,6 +30,18 @@ class Graph:
                     adjacency_matrix[i][j] = Node(None, i, j)
 
         return adjacency_matrix
+
+    def create_circle_data(self, file_name):
+        circle_data = {}
+        with open(file_name, 'r') as file:
+            # Skip the first line (dimensions)
+            next(file)
+
+            # Read the rest of the file to fill the dictionary
+            for line in file:
+                row, col, color = map(int, line.strip().split(','))
+                circle_data[(row, col)] = color
+        return circle_data
 
     def add_edge(self, s_x: int, s_y: int, e_x: int, e_y: int) -> None:
         """
@@ -85,9 +94,9 @@ class Graph:
             for node in row:
                 if node.list_size() > 0 and node not in self.connected_nodes:
                     self.connected_nodes.append(node)
-                        
+
     def remove_all_connected_nodes(self):
-            self.connected_nodes.clear()   
+        self.connected_nodes.clear()
 
     def all_valid_connections(self):
         for row in self.adjacency_matrix:
@@ -95,53 +104,15 @@ class Graph:
                 if node.weight > 2:
                     return False
         return True
-        
+
     def check_win(self) -> bool:
         """
         Check if the game is over, this is when the graph is cyclic
         """
         self.remove_all_connected_nodes()
         self.get_connected_nodes()
-        self.print_graph()
         self.print_connected_nodes()
-        res = self.is_cyclic()
-        return res
-
-        # def dfs(self, current_node, visited, parent_node):
-        # print(f"Visiting node: {current_node}")
-        # visited.append(current_node)
-
-        # # # Validate the node based on its color
-        # # if current_node.color == 1:  # White
-        # #     print("Node is white, checking validity...")
-        # #     if not self.check_valid_white(current_node):
-        # #         print("Node is not valid, returning False")
-        # #         return False
-        # #     print("Node is valid")
-
-        # # elif current_node.color == 2:  # Black
-        # #     print("Node is black, checking validity...")
-        # #     if not self.check_valid_black(current_node):
-        # #         print("Node is not valid, returning False")
-        # #         return False
-        # #     print("Node is valid")
-        # # else:
-        # #     if not current_node.valid_connections():
-        # #         print("Node has no valid connections, returning False")
-        # #         return False
-        # #     print("Node is valid")
-
-        # for adjacent_node in current_node.adjacency_list:
-        #     if adjacent_node not in visited:
-        #         print(f"Node {adjacent_node} is not visited, visiting it...")
-        #         if self.dfs(adjacent_node, visited, current_node) is True:
-        #             return True
-        #     elif adjacent_node != parent_node:
-        #         print("Found a cycle, returning True")
-        #         return True
-
-        # print("Finished visiting all adjacent nodes, returning False")
-        # return False
+        return self.is_cyclic()
 
     def dfs(self, current_node, visited, parent_node):
         print(f"Visiting node: {current_node}")
@@ -161,7 +132,7 @@ class Graph:
                 print("Node is not valid, returning False")
                 return False
             print("Node is valid")
-            
+
         for adjacent_node in current_node.adjacency_list:
             if adjacent_node not in visited:
                 print(f"Node {adjacent_node} is not visited, visiting it...")
@@ -170,16 +141,16 @@ class Graph:
             elif adjacent_node != parent_node:
                 print("Found a cycle, returning True")
                 return True
-    
+
         print("Finished visiting all adjacent nodes, returning False")
         return False
-    
+
     def is_cyclic(self):
         if not self.all_valid_connections():
             return False
-    
+
         self.get_connected_nodes()
-    
+
         for node in self.connected_nodes:
             visited = []  # Clear the visited list for each new starting node
             # Validate the node based on its color
@@ -199,10 +170,10 @@ class Graph:
             if self.dfs(node, visited, None) is True:
                 print("Found a cycle, graph is cyclic")
                 return True
-    
+
         print("Finished visiting all nodes, no cycles found")
         return False
-    
+
     def check_valid_black(self, node: Node) -> bool:
         """
         Check if the black node is valid or not
@@ -243,14 +214,14 @@ class Graph:
                 pos_adyacent.append(1)
 
         # check left
-        if (2 <= (y + 1) <= self.size):
+        if (3 <= (y + 1) <= self.size):
             print("check left")
             if (self.adjacency_matrix[x][y - 1].valid_connections()
                     and self.adjacency_matrix[x][y - 2].valid_connections()):
                 pos_adyacent.append(2)
 
         # check right
-        if (0 <= (y + 1) <= (self.size - 2)):
+        if (0 <= (y + 1) <= (self.size - 3)):
             print("check right")
             if (self.adjacency_matrix[x][y + 1].valid_connections()
                 and self.adjacency_matrix[x][y + 2].valid_connections()
@@ -258,7 +229,7 @@ class Graph:
                 pos_adyacent.append(3)
 
         # check up
-        if (2 <= (x + 1) <= self.size):
+        if (3 <= (x + 1) <= self.size):
             print("check up")
             if (self.adjacency_matrix[x - 1][y].valid_connections()
                 and self.adjacency_matrix[x - 2][y].valid_connections()
@@ -316,7 +287,7 @@ class Graph:
                     and self.adjacency_matrix[x + 1][y].valid_connections()):
                 # print("entre aquib")
                 in_column = True
-                
+
             if (self.adjacency_matrix[x][y - 1].valid_connections()
                     and self.adjacency_matrix[x][y + 1].valid_connections()):
                 # print("entre aquia")
@@ -357,20 +328,6 @@ class Graph:
                 # print("entre aqui3")
                 return True
 
-        # # check if there is two continuous connections
-        # if turn_col_left:
-        #     if not self.adjacency_matrix[x - 2][y].valid_connections():
-        #         valid = True
-        # if turn_col_right:
-        #     if not self.adjacency_matrix[x + 2][y].valid_connections():
-        #         valid = True
-        # if turn_row_left:
-        #     if not self.adjacency_matrix[x][y - 2].valid_connections():
-        #         valid = True
-        # if turn_row_right:
-        #     if not self.adjacency_matrix[x][y + 2].valid_connections():
-        #         valid = True
-
         return False
 
     def print_connected_nodes(self):
@@ -381,7 +338,7 @@ class Graph:
                 print(adjacent, end=" ")
             print()
         print()
-            
+
     def print_graph(self):
         print("----SEE GRAPH----")
         for row in self.adjacency_matrix:
