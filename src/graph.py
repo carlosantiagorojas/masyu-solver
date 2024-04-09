@@ -114,74 +114,63 @@ class Graph:
         self.print_connected_nodes()
         return self.is_cyclic()
 
+    class InvalidNodeException(Exception):
+        pass
+    
     def dfs(self, current_node, visited, parent_node):
         print(f"Visiting node: {current_node}")
         visited.append(current_node)
-
+    
         # Validate the node based on its color
         if current_node.color == 1:  # White
-            print("Node is white, checking validity...")
             if not self.check_valid_white(current_node):
-                print("Node is not valid, returning False")
-                return False
+                print("Node is white, checking validity...")
+                print("Node is not valid, raising InvalidNodeException")
+                raise Graph.InvalidNodeException
             print("Node is valid")
-
+    
         elif current_node.color == 2:  # Black
-            print("Node is black, checking validity...")
             if not self.check_valid_black(current_node):
-                print("Node is not valid, returning False")
-                return False
+                print("Node is white, checking validity...")
+                print("Node is not valid, raising InvalidNodeException")
+                raise Graph.InvalidNodeException
             print("Node is valid")
-
+    
         for adjacent_node in current_node.adjacency_list:
             if adjacent_node not in visited:
-                print(f"Node {adjacent_node} is not visited, visiting it...")
-                if self.dfs(adjacent_node, visited, current_node) is True:
-                    return True
+                # print(f"Node {adjacent_node} is not visited, visiting it...")
+                self.dfs(adjacent_node, visited, current_node)
             elif adjacent_node != parent_node:
                 print("Found a cycle, returning True")
                 return True
-
-        print("Finished visiting all adjacent nodes, returning False")
+    
+        # print("Finished visiting all adjacent nodes, returning False")
         return False
-
+    
     def is_cyclic(self):
         if not self.all_valid_connections():
             return False
-
+    
         self.get_connected_nodes()
+    
+        node = self.connected_nodes[0]
+        visited = []  # Clear the visited list for each new starting node
 
-        for node in self.connected_nodes:
-            visited = []  # Clear the visited list for each new starting node
-            # Validate the node based on its color
-            if node.color == 1:  # White
-                print("Node is white, checking validity...")
-                if not self.check_valid_white(node):
-                    print("Node is not valid, returning False")
-                    return False
-                print("Node is valid")
-            elif node.color == 2:  # Black
-                print("Node is black, checking validity...")
-                if not self.check_valid_black(node):
-                    print("Node is not valid, returning False")
-                    return False
-                print("Node is valid")
-            print(f"Node {node} is not visited, starting DFS...")
+        try:
             if self.dfs(node, visited, None) is True:
                 print("Found a cycle, graph is cyclic")
                 return True
-
-        print("Finished visiting all nodes, no cycles found")
-        return False
+        except Graph.InvalidNodeException:
+            print("Invalid node found, stopping DFS")
+            return False
 
     def check_valid_black(self, node: Node) -> bool:
         """
         Check if the black node is valid or not
         """
         valid = False
-        if node.valid_connections():
-            if self.check_adyacent_black(node.x, node.y):
-                valid = True
+        if self.check_adyacent_black(node.x, node.y):
+            valid = True
 
         return valid
 
@@ -190,39 +179,32 @@ class Graph:
         """
         valid = False
         # print("fasfda", self.adjacency_matrix[x][y].weight)
-        if node.valid_connections():
-            if self.check_adyacent_white(node.x, node.y):
-                valid = True
+        if self.check_adyacent_white(node.x, node.y):
+            valid = True
         return valid
 
     def check_adyacent_black(self, x, y) -> bool:
         """return in what positions are the two adyacent nodes that are connected to the node
-        Args:
-            x (_type_): _description_
-            y (_type_): _description_
-
-        Returns:
-            bool
         """
         pos_adyacent = []
 
         # check down
         if (0 <= (x + 1) <= (self.size - 2)):
-            print("check down")
+            # print("check down")
             if (self.adjacency_matrix[x + 1][y].valid_connections()
                     and self.adjacency_matrix[x + 2][y].valid_connections()):
                 pos_adyacent.append(1)
 
         # check left
         if (3 <= (y + 1) <= self.size):
-            print("check left")
+            # print("check left")
             if (self.adjacency_matrix[x][y - 1].valid_connections()
                     and self.adjacency_matrix[x][y - 2].valid_connections()):
                 pos_adyacent.append(2)
 
         # check right
         if (0 <= (y + 1) <= (self.size - 3)):
-            print("check right")
+            # print("check right")
             if (self.adjacency_matrix[x][y + 1].valid_connections()
                 and self.adjacency_matrix[x][y + 2].valid_connections()
                     and not 2 in pos_adyacent):
@@ -230,7 +212,7 @@ class Graph:
 
         # check up
         if (3 <= (x + 1) <= self.size):
-            print("check up")
+            # print("check up")
             if (self.adjacency_matrix[x - 1][y].valid_connections()
                 and self.adjacency_matrix[x - 2][y].valid_connections()
                     and not 1 in pos_adyacent):
@@ -288,7 +270,7 @@ class Graph:
                 # print("entre aquib")
                 in_column = True
 
-            if (self.adjacency_matrix[x][y - 1].valid_connections()
+            elif (self.adjacency_matrix[x][y - 1].valid_connections()
                     and self.adjacency_matrix[x][y + 1].valid_connections()):
                 # print("entre aquia")
                 in_row = True
@@ -297,35 +279,74 @@ class Graph:
 
         # if is on the first row
         if first_row:
-            if (self.adjacency_matrix[x + 1][y - 1].valid_connections()
-                    or self.adjacency_matrix[x + 1][y + 1].valid_connections()):
+            if ((self.adjacency_matrix[x + 1][y - 1].valid_connections()
+                and self.adjacency_matrix[x + 1][y - 1] in self.adjacency_matrix[x][y - 1].adjacency_list)
+                or (self.adjacency_matrix[x + 1][y + 1].valid_connections()
+                and self.adjacency_matrix[x + 1][y + 1] in self.adjacency_matrix[x][y + 1].adjacency_list)):                    
                 return True
         # if is on the last row
-        if last_row:
-            if (self.adjacency_matrix[x - 1][y - 1].valid_connections()
-                    and self.adjacency_matrix[x - 1][y + 1].valid_connections()):
+        elif last_row:
+            if ((self.adjacency_matrix[x - 1][y - 1].valid_connections()
+                and self.adjacency_matrix[x - 1][y - 1] in self.adjacency_matrix[x][y - 1].adjacency_list)
+                or (self.adjacency_matrix[x - 1][y + 1].valid_connections()
+                and self.adjacency_matrix[x - 1][y + 1] in self.adjacency_matrix[x][y + 1].adjacency_list)):
                 return True
         # if is on the first column
-        if first_col:
-            if (self.adjacency_matrix[x - 1][y + 1].valid_connections()
-                    or self.adjacency_matrix[x + 1][y + 1].valid_connections()):
+        elif first_col:
+            if ((self.adjacency_matrix[x - 1][y + 1].valid_connections()
+                and self.adjacency_matrix[x - 1][y + 1] in self.adjacency_matrix[x - 1][y].adjacency_list)
+                or (self.adjacency_matrix[x + 1][y + 1].valid_connections()
+                and self.adjacency_matrix[x + 1][y + 1] in self.adjacency_matrix[x + 1][y].adjacency_list)):
                 return True
         # if is on the last column
-        if last_col:
-            if (self.adjacency_matrix[x - 1][y - 1].valid_connections()
-                    and self.adjacency_matrix[x + 1][y - 1].valid_connections()):
+        elif last_col:
+            if ((self.adjacency_matrix[x - 1][y - 1].valid_connections()
+                and self.adjacency_matrix[x - 1][y - 1] in self.adjacency_matrix[x - 1][y].adjacency_list)
+                or (self.adjacency_matrix[x + 1][y - 1].valid_connections()
+                and self.adjacency_matrix[x + 1][y - 1] in self.adjacency_matrix[x + 1][y].adjacency_list)):
                 return True
 
         # check turn
-        if in_column or in_row:
-            # print("entre aqui2")
+        elif in_column:
             # check connection turn to a column or row
             # check left
-            if (self.adjacency_matrix[x - 1][y - 1].valid_connections()
-                or self.adjacency_matrix[x + 1][y - 1].valid_connections()
-                or self.adjacency_matrix[x - 1][y + 1].valid_connections()
-                    or self.adjacency_matrix[x + 1][y + 1].valid_connections()):
-                # print("entre aqui3")
+            # print(
+            #     (self.adjacency_matrix[x - 1][y + 1],
+            #     self.adjacency_matrix[x - 1][y + 1] in self.adjacency_matrix[x][y].adjacency_list))
+            
+            # x - 1 
+            if self.adjacency_matrix[x - 1][y - 1] in self.adjacency_matrix[x - 1][y].adjacency_list:
+                return True
+            elif self.adjacency_matrix[x - 1][y + 1] in self.adjacency_matrix[x - 1][y].adjacency_list:
+                return True
+            
+            # x + 1
+            elif self.adjacency_matrix[x + 1][y - 1] in self.adjacency_matrix[x + 1][y].adjacency_list:
+                return True
+            elif self.adjacency_matrix[x + 1][y + 1] in self.adjacency_matrix[x + 1][y].adjacency_list:
+                return True
+            
+            # if ((self.adjacency_matrix[x - 1][y - 1].valid_connections()
+            #     and self.adjacency_matrix[x - 1][y - 1] in self.adjacency_matrix[x][y].adjacency_list)
+            #     or (self.adjacency_matrix[x + 1][y - 1].valid_connections()
+            #     and self.adjacency_matrix[x + 1][y - 1] in self.adjacency_matrix[x][y].adjacency_list)
+            #     or (self.adjacency_matrix[x - 1][y + 1].valid_connections()
+            #     and self.adjacency_matrix[x - 1][y + 1] in self.adjacency_matrix[x][y].adjacency_list)
+            #     or (self.adjacency_matrix[x + 1][y + 1].valid_connections()
+            #     and self.adjacency_matrix[x + 1][y + 1] in self.adjacency_matrix[x][y].adjacency_list)):
+            #     # print("entre aqui3")
+            #     return True
+            
+        elif in_row:
+            # y - 1
+            if self.adjacency_matrix[x - 1][y - 1] in self.adjacency_matrix[x][y - 1].adjacency_list:
+                return True
+            elif self.adjacency_matrix[x + 1][y - 1] in self.adjacency_matrix[x][y - 1].adjacency_list:
+                return True
+            # y + 1
+            elif self.adjacency_matrix[x - 1][y + 1] in self.adjacency_matrix[x][y + 1].adjacency_list:
+                return True
+            elif self.adjacency_matrix[x + 1][y + 1] in self.adjacency_matrix[x][y + 1].adjacency_list:
                 return True
 
         return False
