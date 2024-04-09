@@ -39,10 +39,7 @@ class Node:
         self.y = y
         self.color = color
         self.weight = 0
-        self.left = False
-        self.right = False
-        self.up = False
-        self.down = False
+        self.adjacency_list = []
 
     def valid_connections(self) -> bool:
         """Check if the node has more than two connections
@@ -53,7 +50,16 @@ class Node:
         if 0 < self.weight < 3:
             return True
         return False
-        
     
-    # def __str__(self) -> str:
-    #     return str(self.color)
+    def add_adjacent_node(self, node):
+        return self.adjacency_list.append(node)
+    
+    def remove_adjacent_node(self, node):
+        if node in self.adjacency_list:
+            self.adjacency_list.remove(node)
+            
+    def list_size(self):
+        return len(self.adjacency_list)
+        
+    def __str__(self) -> str:
+        return f"({self.x}, {self.y})"
