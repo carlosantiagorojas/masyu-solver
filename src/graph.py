@@ -107,8 +107,13 @@ class Graph:
         return circle_data
 
     def add_edge(self, s_x: int, s_y: int, e_x: int, e_y: int) -> None:
-        """
-        Add an edge between two nodes
+        """Add an edge between two nodes
+
+        Args:
+            s_x (int): start node x position
+            s_y (int): start node y position
+            e_x (int): end node x position
+            e_y (int): end node y position
         """
         start_node = self.adjacency_matrix[s_x][s_y]
         end_node = self.adjacency_matrix[e_x][e_y]
@@ -137,8 +142,13 @@ class Graph:
         # print()
 
     def remove_edge(self, s_x: int, s_y: int, e_x: int, e_y: int) -> None:
-        """
-        Remove an edge between two nodes
+        """Remove an edge between two nodes
+
+        Args:
+            s_x (int): start node x position
+            s_y (int): start node y position
+            e_x (int): end node x position
+            e_y (int): end node y position
         """
         start_node = self.adjacency_matrix[s_x][s_y]
         end_node = self.adjacency_matrix[e_x][e_y]
@@ -165,7 +175,12 @@ class Graph:
         """
         self.connected_nodes.clear()
 
-    def all_valid_connections(self):
+    def all_valid_connections(self) -> bool:
+        """check if all connections in the graph are valid
+
+        Returns:
+            bool: True if all connections are valid, False otherwise
+        """
         for row in self.adjacency_matrix:
             for node in row:
                 if node.weight > 2:
@@ -253,8 +268,13 @@ class Graph:
             return False
 
     def check_valid_black(self, node: Node) -> bool:
-        """
-        Check if the black node is valid or not
+        """check if the black node is valid or not
+
+        Args:
+            node (Node): the node to check
+
+        Returns:
+            bool: True if the node is valid, False otherwise
         """
         valid = False
         if self.check_adyacent_black(node.x, node.y):
@@ -263,7 +283,13 @@ class Graph:
         return valid
 
     def check_valid_white(self, node: Node) -> bool:
-        """check if the black node is valid or not
+        """check if the white node is valid or not
+
+        Args:
+            node (Node): the node to check
+
+        Returns:
+            bool: True if the node is valid, False otherwise
         """
         valid = False
         # print("fasfda", self.adjacency_matrix[x][y].weight)

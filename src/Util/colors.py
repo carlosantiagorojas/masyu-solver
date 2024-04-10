@@ -1,4 +1,6 @@
 class colors:
+    """Class to store the colors of the game
+    """
     def __init__(self):
         self.BLACK = (0, 0, 0)
         self.WHITE = (255, 255, 255)
@@ -8,6 +10,8 @@ class colors:
         self.flag = False
 
     def change_dark_mode(self):
+        """Changes the colors of the game to dark mode or light mode
+        """
         if not self.flag:
             self.BLACK = (0, 0, 0)
             self.WHITE = (70, 70, 70)

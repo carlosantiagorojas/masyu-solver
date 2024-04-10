@@ -66,6 +66,12 @@ class Game:
         self.prev_cell_clicked = (-10, -10)
 
     def draw(self, screen, events):
+        """Draws the game on the screen
+
+        Args:
+            screen: screen to draw the game
+            events: events to check if the user clicked on the theme button
+        """
         screen.fill(self.colors.BLACK)
         
         for event in events:

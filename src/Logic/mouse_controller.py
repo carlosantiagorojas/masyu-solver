@@ -1,9 +1,38 @@
 from graph import Graph
     
 class MouseController:
+    """
+    MouseController class to handle mouse interactions with the graph
+
+    Attributes
+    ----------
+    graph : Graph
+        The graph that the mouse controller interacts with
+
+    Methods
+    -------
+    __init__(graph)
+        Initialize the mouse controller with a graph
+    check_cell_click(mouse_pos, cell_size, margin_size, N_CELLS)
+        Check if the mouse click is inside the grid and return the position of the cell clicked
+    is_adjacent(cell1, cell2)
+        Check if the cell 1 and the cell 2 are adjacent
+    is_line_exits(cell1, cell2, drawn_lines)
+        Check if the line between cell1 and cell2 is already drawn
+    delete_lines_like(cell1, cell2, drawn_lines)
+        Delete the lines like cell1 and cell2
+    delete_diagonal_lines(drawn_lines)
+        Delete the diagonal lines
+    delete_non_adjacent_lines(drawn_lines)
+        Delete the non-adjacent lines
+    detects_lines(mouse_buttons, mouse_pos, CELL_SIZE,
+                  MARGIN_SIZE, N_CELLS, prev_cell_clicked, drawn_lines)
+        Detects the lines drawn by the player
+    """
+    
     def __init__(self, graph) -> None:
         self.graph = graph
-    
+        
     # Check if the mouse click is inside the grid and return the position of
     # the cell clicked
     def check_cell_click(self, mouse_pos, cell_size, margin_size, N_CELLS):
