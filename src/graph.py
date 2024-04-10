@@ -152,7 +152,10 @@ class Graph:
             return False
     
         self.get_connected_nodes()
-    
+        
+        if len(self.connected_nodes) == 0:
+            return False
+        
         node = self.connected_nodes[0]
         visited = []  # Clear the visited list for each new starting node
 
