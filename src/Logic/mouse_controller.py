@@ -1,4 +1,4 @@
-from game import Game
+from game import Game_flow
     
 class MouseController:
     """
@@ -212,7 +212,7 @@ class MouseController:
                         print(prev_cell_clicked, cell_clicked)
                         s_x, s_y = prev_cell_clicked
                         e_x, e_y = cell_clicked
-                        self.game.make_mode(
+                        self.game.make_move(
                             s_x - 1, s_y - 1, e_x - 1, e_y - 1)
                         drawn_lines.append(prev_cell_clicked)
                         drawn_lines.append(cell_clicked)

@@ -3,7 +3,7 @@ import pygame
 import Util.colors as COLORS
 import GUI.draw_game as draw_game
 from Logic.mouse_controller import MouseController
-from graph import Graph
+from game import Game_flow
 
 
 class Game:
@@ -12,7 +12,7 @@ class Game:
         self.drawn_lines = []
         self.filename = filename
         # Create the graph
-        self.game = Game(self.filename)
+        self.game = Game_flow(self.filename)
         self.mc = MouseController(self.game)
 
         # Define constants
@@ -31,7 +31,7 @@ class Game:
         self.MARGIN_SIZE = 64
 
         # Number of cells in a row or column
-        self.N_CELLS = self.graph.size
+        self.N_CELLS = self.game.get_graph_size()
 
         # Size of each cell
         self.CELL_SIZE = (self.SCREEN_WIDTH - 2 *
@@ -61,7 +61,7 @@ class Game:
         self.button_clicked = False
         
         # Create the data with the file
-        self.circle_data = self.graph.create_circle_data(filename)
+        self.circle_data = self.game.graph.create_circle_data(filename)
 
         self.prev_cell_clicked = (-10, -10)
 

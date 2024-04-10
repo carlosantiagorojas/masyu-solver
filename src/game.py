@@ -1,6 +1,6 @@
 from graph import Graph
 
-class Game:
+class Game_flow:
     def __init__(self, filename) -> None:
         self.graph = Graph(filename)
     
@@ -21,3 +21,9 @@ class Game:
         Check if the game is won
         """
         return self.graph.check_win()
+    
+    def get_graph_size(self):
+        """
+        Get the size of the graph
+        """
+        return self.graph.size

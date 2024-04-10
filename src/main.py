@@ -6,8 +6,6 @@ import Util.colors as COLORS
 import GUI.show_game as show_game
 import GUI.show_menu as show_menu
 
-from graph import Graph
-
 def main():
     # Check command line arguments
     filename = check_args(sys.argv)
