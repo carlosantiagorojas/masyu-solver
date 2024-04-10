@@ -71,7 +71,15 @@ def main():
     pygame.quit()
     sys.exit()
 
-def check_args(args):
+def check_args(args: str) -> str:
+    """get the filename from the command line arguments
+
+    Args:
+        args (str): command line arguments
+
+    Returns:
+        str: filename
+    """
     if len(args) != 2:
         print("Usage: python main.py <file_name>")
         exit(1)

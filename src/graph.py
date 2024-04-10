@@ -2,12 +2,67 @@ from node import Node
 
 
 class Graph:
+    """
+    Graph class to represent a graph
+    
+    Attributes
+    ----------
+    adjacency_matrix : list
+        The adjacency matrix of the graph
+    size : int
+        The size of the graph
+    connected_nodes : list
+        The list of connected nodes in the graph
+    
+    Methods
+    -------
+    create_adjacency_matrix(file_name)
+        Create an adjacency matrix from a file
+    create_circle_data(file_name)
+        Create circle data from a file
+    add_edge(s_x, s_y, e_x, e_y)
+        Add an edge between two nodes
+    remove_edge(s_x, s_y, e_x, e_y)
+        Remove an edge between two nodes
+    get_connected_nodes()
+        Get all connected nodes in the graph
+    remove_all_connected_nodes()
+        Remove all connected nodes from the graph
+    all_valid_connections()
+        Check if all connections in the graph are valid
+    check_win()
+        Check if the game is over, this is when the graph is cyclic
+    dfs(current_node, visited, parent_node)
+        Depth-first search from a node
+    is_cyclic()
+        Check if the graph is cyclic
+    check_valid_black(node)
+        Check if a black node is valid
+    check_valid_white(node)
+        Check if a white node is valid
+    check_adyacent_black(x, y)
+        Check the adjacent black nodes of a node
+    check_adyacent_white(x, y)
+        Check the adjacent white nodes of a node
+    print_connected_nodes()
+        Print all connected nodes in the graph
+    print_graph()
+        Print the graph
+    """
     def __init__(self, file_name) -> None:
         self.adjacency_matrix = self.create_adjacency_matrix(file_name)
         self.size = len(self.adjacency_matrix)
         self.connected_nodes = []
 
-    def create_adjacency_matrix(self, file_name):
+    def create_adjacency_matrix(self, file_name: str) -> list[list[Node]]:
+        """Create an adjacency matrix from a file
+
+        Args:
+            file_name (str): The name of the file
+
+        Returns:
+            list[list[Node]]: The adjacency matrix
+        """
         with open(file_name, 'r') as file:
             # Read the first line to get the dimensions of the matrix
             dimensions = int(file.readline().strip())
@@ -31,7 +86,15 @@ class Graph:
 
         return adjacency_matrix
 
-    def create_circle_data(self, file_name):
+    def create_circle_data(self, file_name: str) -> dict:
+        """Create circle data from a file
+
+        Args:
+            file_name (str): The name of the file
+
+        Returns:
+            dict: The circle data
+        """
         circle_data = {}
         with open(file_name, 'r') as file:
             # Skip the first line (dimensions)
@@ -90,12 +153,16 @@ class Graph:
         end_node.remove_adjacent_node(start_node)
 
     def get_connected_nodes(self):
+        """get all connected nodes in the graph
+        """
         for row in self.adjacency_matrix:
             for node in row:
                 if node.list_size() > 0 and node not in self.connected_nodes:
                     self.connected_nodes.append(node)
 
     def remove_all_connected_nodes(self):
+        """remove all connected nodes from the graph
+        """
         self.connected_nodes.clear()
 
     def all_valid_connections(self):
@@ -117,7 +184,20 @@ class Graph:
     class InvalidNodeException(Exception):
         pass
     
-    def dfs(self, current_node, visited, parent_node):
+    def dfs(self, current_node: Node, visited: list[Node], parent_node: Node) -> bool:
+        """do a depth-first search from a node to check if the graph is cyclic
+
+        Args:
+            current_node (Node): the current node
+            visited (Node): the list of visited nodes
+            parent_node (Node): the parent node
+
+        Raises:
+            Graph.InvalidNodeException: if an invalid node is found
+
+        Returns:
+            bool: True if a cycle is found, False otherwise
+        """
         print(f"Visiting node: {current_node}", current_node.color)
         visited.append(current_node)
     
@@ -147,7 +227,12 @@ class Graph:
         # print("Finished visiting all adjacent nodes, returning False")
         return False
     
-    def is_cyclic(self):
+    def is_cyclic(self) -> bool:
+        """check if the graph is cyclic
+
+        Returns:
+            bool: True if the graph is cyclic, False otherwise
+        """
         if not self.all_valid_connections():
             return False
     
@@ -186,8 +271,15 @@ class Graph:
             valid = True
         return valid
 
-    def check_adyacent_black(self, x, y) -> bool:
+    def check_adyacent_black(self, x: int, y:int) -> bool:
         """return in what positions are the two adyacent nodes that are connected to the node
+
+        Args:
+            x (int): the x position of the node
+            y (int): the y position of the node
+
+        Returns:
+            bool: True if the node is valid, False otherwise
         """
         pos_adyacent = []
         # print(x + 1, y + 1, self.size)
@@ -227,7 +319,16 @@ class Graph:
             return True
         return False
 
-    def check_adyacent_white(self, x, y):
+    def check_adyacent_white(self, x: int, y:int) -> bool:
+        """return in what positions are the two adyacent nodes that are connected to the node
+
+        Args:
+            x (int): the x position of the node
+            y (int): the y position of the node
+
+        Returns:
+            bool: True if the node is valid, False otherwise
+        """
         in_column = False
         in_row = False
         first_row = False
