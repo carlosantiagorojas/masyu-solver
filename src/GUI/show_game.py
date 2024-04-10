@@ -12,8 +12,8 @@ class Game:
         self.drawn_lines = []
         self.filename = filename
         # Create the graph
-        self.graph = Graph(self.filename)
-        self.mc = MouseController(self.graph)
+        self.game = Game(self.filename)
+        self.mc = MouseController(self.game)
 
         # Define constants
 
@@ -130,6 +130,6 @@ class Game:
     def check_win(self):
         print("///////////////////////////////////////////////////")
         print("Button clicked!")
-        self.has_won = self.graph.check_win()
+        self.has_won = self.game.check_solved()
         self.button_clicked = True
         print(self.has_won)

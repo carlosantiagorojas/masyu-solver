@@ -1,4 +1,4 @@
-from graph import Graph
+from game import Game
     
 class MouseController:
     """
@@ -30,8 +30,8 @@ class MouseController:
         Detects the lines drawn by the player
     """
     
-    def __init__(self, graph) -> None:
-        self.graph = graph
+    def __init__(self, game) -> None:
+        self.game = game
         
     # Check if the mouse click is inside the grid and return the position of
     # the cell clicked
@@ -204,7 +204,7 @@ class MouseController:
                         print(prev_cell_clicked, cell_clicked)
                         s_x, s_y = prev_cell_clicked
                         e_x, e_y = cell_clicked
-                        self.graph.remove_edge(s_x - 1, s_y - 1, e_x - 1, e_y - 1)
+                        self.game.undo_move(s_x - 1, s_y - 1, e_x - 1, e_y - 1)
                         drawn_lines = self.delete_lines_like(
                             prev_cell_clicked, cell_clicked, drawn_lines)
                     else:
@@ -212,7 +212,7 @@ class MouseController:
                         print(prev_cell_clicked, cell_clicked)
                         s_x, s_y = prev_cell_clicked
                         e_x, e_y = cell_clicked
-                        self.graph.add_edge(
+                        self.game.make_mode(
                             s_x - 1, s_y - 1, e_x - 1, e_y - 1)
                         drawn_lines.append(prev_cell_clicked)
                         drawn_lines.append(cell_clicked)
