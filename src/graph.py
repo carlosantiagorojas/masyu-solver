@@ -53,6 +53,7 @@ class Graph:
         self.adjacency_matrix = self.create_adjacency_matrix(file_name)
         self.size = len(self.adjacency_matrix)
         self.connected_nodes = []
+        self.pearls = self.get_pearls()
 
     def create_adjacency_matrix(self, file_name: str) -> list[list[Node]]:
         """Create an adjacency matrix from a file
@@ -169,6 +170,16 @@ class Graph:
             for node in row:
                 if node.list_size() > 0 and node not in self.connected_nodes:
                     self.connected_nodes.append(node)
+    
+    def get_pearls(self) -> list[Node]:
+        """get all pearls in the graph
+        """
+        pearls = []
+        for row in self.adjacency_matrix:
+            for node in row:
+                if node.color != None:
+                    pearls.append(node)
+        return pearls
 
     def remove_all_connected_nodes(self):
         """remove all connected nodes from the graph
@@ -258,11 +269,20 @@ class Graph:
         
         node = self.connected_nodes[0]
         visited = []  # Clear the visited list for each new starting node
-
+        pearls_included = []
+        
         try:
             if self.dfs(node, visited, None) is True:
-                print("Found a cycle, graph is cyclic")
-                return True
+
+                for visited_node in visited:
+                    if visited_node.color != None:
+                        pearls_included.append(visited_node)
+                print(len(pearls_included), len(self.pearls))  
+                if len(pearls_included) == len(self.pearls):
+                    print("Found a cycle, graph is cyclic")
+                    return True
+                else:
+                    return False
         except Graph.InvalidNodeException:
             print("Invalid node found, stopping DFS")
             return False
